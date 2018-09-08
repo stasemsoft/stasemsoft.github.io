@@ -1,0 +1,26 @@
+language: smalltalk
+
+os:
+  - linux
+
+smalltalk:
+  - Pharo-6.1
+
+install:
+  # Pillar installation
+  - git clone https://github.com/pillar-markup/pillar.git .pillar -b dev-7 # Clone pillar
+  - cd .pillar && ./scripts/build.sh && cd ..
+
+script:
+  - .pillar/build/pillar build html
+  - cd _result/html && touch .nojekyll && cd ..
+
+deploy:
+  provider: pages
+  target-branch: master
+  skip-cleanup: true
+  github-token: $GH_TOKEN
+  keep-history: true
+  local_dir: _result/html
+  on:
+    branch: source
